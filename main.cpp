@@ -15,7 +15,7 @@ void wave_sample();
 Thread thread(osPriorityHigh);
 Thread sample(osPriorityAboveNormal);
 EventQueue sampleQueue;
-int delay = 1;
+int delay = 0;
 const int sample_times = 500; 
 
 int main(void)
@@ -29,48 +29,107 @@ int main(void)
     uLCD.textbackground_color(0xFFFFFF);
     uLCD.printf("100Hz\n");
     uLCD.textbackground_color(0x000000);
-    uLCD.printf("50Hz");
+    uLCD.printf("50Hz\n");
+    uLCD.textbackground_color(0x000000);
+    uLCD.printf("33Hz\n");
     ThisThread::sleep_for(2s);
     while (1) {
-        if (but1 == 1) {
-            temp = 1;
+        if ((but1 == 1) && (but2 == 0)) {
+            temp = 0;
             uLCD.locate(0,0);
             uLCD.textbackground_color(0xFFFFFF);
             uLCD.printf("100Hz\n");
             if (delay == 1) {
-                uLCD.textbackground_color(0x000000);
-                uLCD.printf("50Hz");
-            } else {
                 uLCD.textbackground_color(BLUE);
-                uLCD.printf("50Hz");
-            } 
-        }
-        if (but2 == 1) {
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("33Hz\n");
+            } else if (delay == 2){
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(BLUE);
+                uLCD.printf("33Hz\n");
+            } else {
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("33Hz\n");
+            }
+        } else if ((but1 == 0) && (but2 == 1)) {
+            temp = 1;
+            uLCD.locate(0,0);
+            if (delay == 0) {
+                uLCD.textbackground_color(BLUE);
+                uLCD.printf("100Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("33Hz\n");
+            } else if (delay == 1) {
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("100Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("33Hz\n");
+            } else {
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("100Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(BLUE);
+                uLCD.printf("33Hz\n");
+            }
+        } else if ((but1 == 1) && (but2 == 1)) {
             temp = 2;
             uLCD.locate(0,0);
-            if (delay == 2) {
-                uLCD.textbackground_color(0x000000);
-                uLCD.printf("100Hz\n");
-            } else {
+            if (delay == 0) {
                 uLCD.textbackground_color(BLUE);
                 uLCD.printf("100Hz\n");
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("33Hz\n");
+            } else if (delay == 1) {
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("100Hz\n");
+                uLCD.textbackground_color(BLUE);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("33Hz\n");
+            } else {
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("100Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("33Hz\n");
             }
-            uLCD.textbackground_color(0xFFFFFF);
-            uLCD.printf("50Hz");
         }
         if (but3 == 1) {
             delay = temp;
             uLCD.locate(0,0);
-            if (delay == 1) {
+            if (delay == 0) {
                 uLCD.textbackground_color(0xFFFFFF);
                 uLCD.printf("100Hz\n");
                 uLCD.textbackground_color(0x000000);
                 uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("33Hz\n");
+            } else if (delay == 1) {
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("100Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0x000000);
+                uLCD.printf("33Hz\n");
             } else {
                 uLCD.textbackground_color(0x000000);
                 uLCD.printf("100Hz\n");
-                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.textbackground_color(0x000000F);
                 uLCD.printf("50Hz\n");
+                uLCD.textbackground_color(0xFFFFFF);
+                uLCD.printf("33Hz\n");
             }
             ThisThread::sleep_for(2s);
             sampleQueue.call(&wave_sample);
@@ -92,10 +151,12 @@ void wave_gen()
                 out -= mns;
             }
             Aout = out;
-            if (delay == 1) {
+            if (delay == 0) {
                 ThisThread::sleep_for(1ms);
-            } else {
+            } else if (delay == 1) {
                 ThisThread::sleep_for(2ms);
+            } else {
+                ThisThread::sleep_for(3ms);
             }
         }
     }
